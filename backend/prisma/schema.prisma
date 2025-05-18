@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+model Kategori {
+  kategori_id Int     @id @default(autoincrement())
+  ad          String @unique
+
+  kitaplar    Kitap[]
+}
+
+model YayinEvi {
+  yayin_evi_id Int    @id @default(autoincrement())
+  ad           String @unique
+
+  kitaplar     Kitap[]
+}
+
+model Yazar {
+  yazar_id Int     @id @default(autoincrement())
+  ad       String
+  soyad    String
+
+  kitaplar Kitap_Yazar[]
+ @@unique([ad, soyad], name: "ad_soyad")
+
+}
+
+model Kitap {
+  isbn         String       @id
+  baslik       String
+  sayfa_sayisi Int
+  yayin_tarihi DateTime?
+  stok_adet    Int          @default(0)
+
+  kategori_id  Int
+  yayin_evi_id Int
+
+  kategori     Kategori     @relation(fields: [kategori_id], references: [kategori_id])
+  yayin_evi    YayinEvi     @relation(fields: [yayin_evi_id], references: [yayin_evi_id])
+
+  oduncs       Odunc[]
+  yazarlar     Kitap_Yazar[]
+}
+
+model Uye {
+  uye_id        Int      @id @default(autoincrement())
+  isim          String
+  soyisim       String
+  eposta        String   @unique
+  telefon       String?
+  parola        String
+  uyelik_tarihi DateTime @default(now())
+
+  oduncs        Odunc[]
+}
+
+model Odunc {
+  odunc_id     Int      @id @default(autoincrement())
+  uye_id       Int
+  isbn         String
+  odunc_tarihi DateTime @default(now())
+  iade_tarihi  DateTime?
+
+  uye          Uye      @relation(fields: [uye_id], references: [uye_id])
+  kitap        Kitap    @relation(fields: [isbn], references: [isbn])
+}
+
+model Kitap_Yazar {
+  isbn     String
+  yazar_id Int
+
+  kitap    Kitap   @relation(fields: [isbn], references: [isbn], onDelete: Cascade)
+  yazar    Yazar   @relation(fields: [yazar_id], references: [yazar_id], onDelete: Cascade)
+
+  @@id([isbn, yazar_id])
+}
