@@ -24,7 +24,17 @@ export async function getOduncById(req, res) {
         const oduncler = await prisma.odunc.findMany({
             where: { uye_id: parseInt(uye_id) },
             include: {
-                kitap: true,
+                kitap: {
+                    include: {
+                        kategori: true,
+                        yayin_evi: true,
+                        yazarlar: {
+                            include: {
+                                yazar: true,
+                            }
+                        }
+                    }
+                }
             },
         });
 
@@ -33,6 +43,7 @@ export async function getOduncById(req, res) {
         res.status(500).json({ message: "Ödünç kayıtları getirilemedi", error });
     }
 }
+
 
 
 export async function createOdunc(req, res) {

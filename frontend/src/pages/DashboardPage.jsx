@@ -22,7 +22,7 @@ const DashboardPage = () => {
           yazar_ad: book.yazarlar?.map(y => `${y.yazar.ad} ${y.yazar.soyad}`).join(', ') || ''
         }));
         setBooks(formattedData);
-        setFilteredBooks(formattedData); // ilk yüklemede hepsini göster
+        setFilteredBooks(formattedData); 
       } catch (error) {
         console.error("Kitaplar alınırken hata oluştu:", error);
       }
@@ -31,7 +31,7 @@ const DashboardPage = () => {
     fetchBooks();
   }, []);
 
-  // Arama filtreleme
+  
   useEffect(() => {
     const results = books.filter(book =>
       book.baslik.toLowerCase().includes(searchTerm.toLowerCase()) ||

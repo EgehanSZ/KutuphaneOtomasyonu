@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Button } from 'antd';
 
 const BorrowedBookCard = ({ book }) => {
+  console.log("BorrowedBookCard book:", book);
   return (
     <Card
       title={book.baslik}
@@ -9,7 +10,10 @@ const BorrowedBookCard = ({ book }) => {
       <p>Yazar: {book.yazar_ad}</p>
       <p>Stok Sayısı: {book.stok_adet}</p>
       <p>Yayınevi: {book.yayin_evi_ad}</p>
+      <p>Kategori: {book.kategori_ad}</p>
       <p>Sayfa Sayısı: {book.sayfa_sayisi}</p>
+
+
 
 
       <div style={{ marginTop: 16 }}>
